@@ -1,186 +1,133 @@
-# **Module 10: Secure User Accounts, Pydantic Validation, and CI/CD**
+# **Module 14: Completing BREAD for Calculations and Final Project**
 
 ## **Module Overview**
 
-In **Module 10**, you will leverage your foundational knowledge of **databases** (from Module 9) and extend it to build a **secure user model** with **SQLAlchemy**, **Pydantic** validation, and an end-to-end **CI/CD pipeline** that pushes your Docker image to **Docker Hub**. Specifically, you will:
+In **Module 14**, you will finalize your **BREAD (Browse, Read, Edit, Add, Delete)** functionality for calculations on the front end—tying it together with your JWT-secured back end. Additionally, you will implement a **final project feature** that extends beyond basic login and calculations. This feature will require **unit, integration, and end-to-end (E2E) testing** and be deployed to Docker Hub through your existing CI/CD pipeline. Optionally, you may incorporate **Alembic** for database migrations if your final feature modifies the schema.
 
-1. Create a **User** model that stores **hashed passwords** (no plain text!), enforcing best security practices.  
-2. Validate user data using **Pydantic**, ensuring fields (e.g., email) meet required formats and preventing malformed data from reaching the database.  
-3. Write and run **unit** and **integration tests** in GitHub Actions, where a **PostgreSQL** container is used for real database interactions.  
-4. Finalize a **CI/CD workflow** to build, scan, and deploy your Docker image to Docker Hub, promoting DevOps principles that ensure code quality and security.
+By the end of this module, you will submit a **fully functional, secure, tested, and containerized** Python web application as your final deliverable.
 
-By successfully completing Module 10, you will demonstrate mastery of several **Course Learning Outcomes (CLOs)**:
+### **Relevant Course Learning Outcomes (CLOs)**
 
 - **CLO 3:** Create Python applications with automated testing.  
 - **CLO 4:** Set up GitHub Actions for Continuous Integration (CI), automating tests and Docker builds to demonstrate DevOps principles.  
 - **CLO 10:** Apply containerization techniques to containerize applications using Docker.  
+- **CLO 11:** Create, consume, and test REST APIs using Python.  
 - **CLO 12:** Integrate Python programs with SQL databases to create and manipulate data.  
 - **CLO 13:** Serialize, deserialize, and validate JSON using Python with Pydantic.  
 - **CLO 14:** Utilize best practices for software development security by implementing secure authentication and authorization techniques, including encryption, hashing, and encoding.
 
 ---
 
-## **Why Focus on Secure User Models, Validation, and CI/CD?**
+## **Why Complete BREAD and Add a New Feature Now?**
 
-1. **Security from the Start:** Handling passwords securely (hashed + salted) and validating inputs (with Pydantic) helps you avoid critical vulnerabilities.  
-2. **Seamless Development:** Orchestrating tests (unit, integration) via GitHub Actions ensures code reliability and quickly flags regressions.  
-3. **Production Readiness:** By deploying Docker images to Docker Hub, you lay the groundwork for future expansions (Routes in Module 12, UI in Module 13, final project in Module 14).
-
----
-
-## **Module 10 Videos**
-
-1. **Overview Video (on Canvas)**  
-   - Shows how **SQLAlchemy** models and **Pydantic** schemas integrate for secure user data handling.  
-   - Explains basic password hashing with a library (e.g., `bcrypt`).  
-
-2. **Hands-On Video (on Canvas)**  
-   - Demonstrates writing **unit** and **integration tests** that spin up a **PostgreSQL** service in GitHub Actions.  
-   - Explains building a **CI/CD pipeline** that checks for vulnerabilities before pushing to Docker Hub.
-
----
-
-## **Learning Pathway**
-
-### **Recall**
-
-**Title:** From Raw SQL to an ORM & CI/CD  
-**Grading Type:** Points  
-**Instructions:**  
-1. **Reflect:** How did manually writing SQL in Module 9 inform your approach to database operations? Why might an ORM approach (SQLAlchemy) be more efficient or safer for production?  
-2. **Discussion Prompt:**  
-   - Why is hashing passwords a mandatory practice in modern web apps?  
-   - What benefits do automated tests + Docker deployment offer as your project scales?
-
-**Purpose:** These questions transition you from manual SQL operations to a robust, professionally aligned Python stack with continuous delivery.
-
----
-
-## **Step-by-Step Guide: Secure User Model & CI/CD**
-
-### **1. Creating a Secure User Model (SQLAlchemy)**
-
-- **Model Fields:** `id`, `username`, `email`, `password_hash`, `created_at`.  
-- **Uniqueness Constraints:** Enforce no duplicate usernames or emails.  
-- **Hashed Passwords:** Rely on a hashing library (e.g., `bcrypt`) to store a salted hash instead of plain-text passwords.
-
-### **2. Validating Data with Pydantic**
-
-- **UserCreate Schema:**  
-  - Includes `username`, `email`, `password` in plain text (for creation only).  
-  - Optionally validate minimum password length, email format, etc.  
-
-- **UserRead Schema:**  
-  - Exposes only safe fields (e.g., `id`, `username`, `email`, `created_at`), excluding `password_hash`.
-
-### **3. Database Testing in GitHub Actions**
-
-- **Unit Tests:**  
-  - Verify password hashing/verification methods (ensure plain text != hashed text).  
-  - Check that invalid user data (e.g., duplicate username) is handled gracefully.  
-- **Integration Tests:**  
-  - Spin up a test **PostgreSQL** container in GitHub Actions.  
-  - Insert users, confirm the database rejects invalid inputs, etc.  
-
-### **4. CI/CD Workflow: Build, Scan, Deploy**
-
-- **Test Stage:** Runs all unit/integration tests; fails early on errors.  
-- **Security/Scan Stage:** (Optional) uses a scanner to detect high/critical vulnerabilities in your Docker image.  
-- **Deploy Stage:** Pushes the final image to **Docker Hub** if prior stages succeed.
+1. **Comprehensive Scope**: Ensuring full BREAD for calculations completes your core application functions, while the new feature showcases your ability to extend and innovate.  
+2. **Mastery Demonstration**: Combining final touches on existing features with something entirely new (including all levels of testing) cements your skill set.  
+3. **Optional Alembic**: Implementing migrations with Alembic (if needed) demonstrates professional DB update handling—useful if your new feature alters the data model.
 
 ---
 
 ## **Hands-On Assignment**
 
-**Title:** Secure User Model, Pydantic Validation, Database Testing, and Docker Deployment  
-**Grading Type:** Points  
+### **Part 1: Completing BREAD for Calculations**
 
-**Instructions:**
+- **Browse**: Display all calculations belonging to the logged-in user.  
+- **Read**: (Optional) Provide a detailed view of a single calculation’s data.  
+- **Edit**: Let users update calculation fields (operands, operation type) on the front end.  
+- **Add**: Allow creation of a new calculation (choose operation, input operands, etc.).  
+- **Delete**: Provide a straightforward way to remove a calculation.  
 
-1. **Set Up Your SQLAlchemy User Model**  
-   - Define columns for `username`, `email`, `password_hash`, ensuring **unique constraints**.  
-   - Incorporate a `created_at` timestamp.
+**Implementation Tips**:
+- Continue using **JWT** for route protection.  
+- Keep or refine your front-end validation (numeric checks).  
+- Extend your Playwright E2E tests to cover these new BREAD interactions, focusing on **positive** and **negative** scenarios (e.g., invalid numeric input).
 
-2. **Add Pydantic Schemas**  
-   - **UserCreate**: For new user data (`username`, `email`, `password`).  
-   - **UserRead**: For returning user details (omitting `password_hash`).
+### **Part 2: Final Project Feature**
 
-3. **Implement Hashing**  
-   - Use a function to hash raw passwords before storing them in `password_hash`.  
-   - Provide a verify function to confirm a plain-text password matches the stored hash.
+Beyond the BREAD functionality, add **one new feature** (or propose a similar scope). This feature must be tested at **unit**, **integration**, and **E2E** levels:
 
-4. **Write Unit and Integration Tests**  
-   - Unit tests for hashing, schema validation, etc.  
-   - Integration tests requiring a real database (Postgres container in GitHub Actions) to test user uniqueness, invalid emails, etc.
+1. **User Profile & Password Change**  
+   - Add a page or form to let users update profile info (username, email) or change passwords (hash new passwords).  
+   - Test with unit (change logic), integration (DB updates), E2E (flow from login -> profile -> password change -> re-login).
 
-5. **Configure CI/CD**  
-   - **Test**: Ensure all tests pass in GitHub Actions.  
-   - **Deploy**: Push your Docker image to **Docker Hub** upon successful tests.
+2. **Additional Calculation Type**  
+   - Introduce an advanced operation (exponentiation, modulus, or something custom).  
+   - Update routes, Pydantic schemas, and the front-end UI.  
+   - Write tests confirming correct logic (unit), route handling (integration), and front-end usage (E2E).
 
-6. **Submit**  
-   - **GitHub Repository Link**: Must include **your own code** (not a copy of the instructor’s repo).  
-   - In your **README**, add:  
-     - A brief overview of how to run tests locally.  
-     - **Links** to your Docker Hub repository (where your image is pushed).  
-   - Remember, this is the same project you’ll build upon in future modules, ultimately forming your final project.
+3. **Report/History Feature**  
+   - Provide usage stats or summaries (e.g., total calculations, average operands).  
+   - Implement routes/data storage, and show a small UI section with these metrics.  
+   - Thoroughly test logic (unit), route (integration), and UI flow (E2E).
 
----
+**(Alternative)**: If you have a different idea of comparable complexity (DB changes, new logic, UI integration), clear it with your instructor first.
 
-## **Reflect**
+### **Optional Alembic (Bonus)**
 
-**Title:** Module 10 Reflection  
-**Grading Type:** Points  
-**Instructions:**  
-Write **200-300 words** covering:
-
-1. **CLO 3, 4, 10, 12, 13, 14:** Reflect on how each of these CLOs comes into play (testing, CI/CD, containerization, database integration, data validation, security).  
-2. **Security & Validation:** What new insights did you gain about hashing passwords and validating user input with Pydantic?  
-3. **Challenges & Solutions:** Note any significant hurdles (e.g., Docker Hub authentication, environment variables for tests) and how you resolved them.  
-
+- If your final feature requires changes to the database schema (new columns/tables), consider using **Alembic** to generate and apply migrations.  
+- Include instructions in your README on how to run these migrations (e.g., `alembic upgrade head`).
 
 ---
 
-## **Quiz**
+## **Testing Requirements**
 
-**Title:** Secure User Model & CI/CD Quiz  
-**Grading Type:** Points  
+All features must be tested at three levels:
 
-**Instructions:**  
-1. **Complete the Quiz on Canvas**, covering topics like:  
-   - SQLAlchemy model basics (unique constraints, hashed passwords).  
-   - Pydantic validations and error handling.  
-   - GitHub Actions test containers (PostgreSQL).  
-   - Docker image scanning + deployment to Docker Hub.  
+1. **Unit Tests**  
+   - Small, focused tests for your new logic or changed data model functions (e.g., new calculation method, user profile logic).
 
-2. **Question Types:**  
-   - **Multiple-Choice:** Identify correct usage of hashing or Pydantic validations.  
-   - **Short Answer:** Explain how you’d handle a failing test or a duplicate username scenario.  
-   - **Scenario-Based:** Propose a fix if your pipeline fails to push an image to Docker Hub or if the Postgres container won’t spin up in CI.
+2. **Integration Tests**  
+   - Confirm that your routes (FastAPI) interact correctly with the DB, ensuring any new or updated endpoints work as expected.
+
+3. **E2E Tests (Playwright)**  
+   - Extend or add new scenarios:  
+     - Positive: Valid usage of the new feature plus the new BREAD interactions.  
+     - Negative: Invalid inputs, unauthorized access, or erroneous states.  
+   - All E2E tests should pass in your CI pipeline.
+
+---
+
+## **Deployment to Docker Hub**
+
+- Maintain your **GitHub Actions** pipeline from previous modules.  
+- On each commit or pull request, your pipeline will:
+  1. Spin up DB + server, run all tests (unit, integration, E2E).  
+  2. If green, push your final image to Docker Hub.  
+  3. If using Alembic, consider adding a step to run migrations in your test environment.
+
+---
+
+## **Submission Requirements**
+
+1. **GitHub Repository Link**  
+   - Must include final BREAD code for calculations, your new feature, all relevant tests, and optional Alembic migrations.  
+   - In **README**: 
+     - Summarize how to run the full app, the tests, and (if applicable) the migration commands.  
+     - Provide a link to your Docker Hub repository.
+
+2. **Module 14 Reflection** (300–500 words)  
+   1. **Front-End Integration**: How did finishing the BREAD UI + final feature shape your complete full-stack perspective?  
+   2. **DevOps & Testing**: Discuss how you balanced unit, integration, and E2E tests for your final project.  
+   3. **Security & Best Practices**: Note final approaches to JWT usage, user data protection, and advanced checks for your new feature.  
+   4. **Challenges & Solutions**: Summarize any last hurdles (migrations, advanced feature logic, front-end complexities) and how you addressed them.
+
+3. **Quiz** (on Canvas)  
+   - **Multiple-Choice** and **Short-Answer** questions about finalizing your project, BREAD patterns, advanced features, potential Alembic usage, and comprehensive testing strategies.
 
 ---
 
 ## **Tips for Success**
 
-1. **Never Store Plain Passwords:** Only store salted, hashed passwords.  
-2. **Validate with Pydantic:** Catch invalid data (e.g., malformed emails, short passwords) early.  
-3. **Test Thoroughly:** Combine unit + integration tests to cover all code paths, ensuring your pipeline is robust.  
-4. **Automate CI/CD:** A fully automated workflow frees you to focus on feature development while maintaining quality.  
-5. **Documentation:** Keep a clear README—this project is your stepping stone for Modules 11–14, culminating in your final project.
+1. **Design First**: Outline your new feature’s data model, routes, and front-end changes before coding.  
+2. **Code Iteratively**: Complete BREAD, then build the new feature, adding tests at each level (unit -> integration -> E2E).  
+3. **Consider Alembic**: If DB schema changes, demonstrate professional migrations.  
+4. **Document Thoroughly**: This final version is your portfolio piece—be sure it’s well-structured, secure, and tested.
 
 ---
 
 ## **Submission Deadline**
 
-Please submit the following by **[Insert Deadline Here]**:
-
-1. **GitHub Repository Link** (showing your code, tests, and CI config).  
-2. **Module 10 Reflection** (200-300 words).  
-3. **In your GitHub repo’s README**:  
-   - Links to your Docker Hub repository.  
-   - Instructions on how to run tests locally.  
-
-Late submissions may be subject to course policy penalties.
+All final deliverables (GitHub repo link, Docker Hub link, Reflection) are due by **[Insert Deadline Here]**. Late submissions may be subject to course policy.
 
 ---
 
-**Congratulations!** You have taken a significant step toward mastering secure user management, robust validation, comprehensive testing, and automated deployments. This foundation will prove invaluable as you evolve your application in Modules 11–14, leading to a polished **final project**.
+**Congratulations!** You have built and enhanced a robust full-stack application, culminating in a final project feature that showcases advanced testing, security, and DevOps expertise. This end-to-end solution forms a powerful demonstration of your newly acquired Python web development skills.
